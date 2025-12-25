@@ -10,7 +10,7 @@ from pyscript import document, window
 MODEL_LIST = {
     "iwataGPT1.0": "iwataGPT1.0.json",
     "iwataGPT1.1": "iwataGPT1.1.json",
-    "iwataGPT1.1Pro": "iwataGPT1.1Pro.json"
+    "iwataGPT1.1Pro": "iwataGPT1.1Pro.json",
     "iwataGPT1.1Thinking": "iwataGPT1.1Thinking.json"
 }
 
