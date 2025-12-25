@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>AIモデル切り替え対話</title>
+    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
+    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 20px auto; padding: 20px; line-height: 1.6; }
+        #chat-log { border: 1px solid #ddd; height: 400px; overflow-y: auto; padding: 15px; margin: 10px 0; background: #fafafa; border-radius: 8px; }
+        .user { color: #2c3e50; font-weight: bold; margin-top: 5px; }
+        .ai { color: #27ae60; margin-bottom: 15px; padding-left: 10px; border-left: 3px solid #27ae60; }
+        .controls { display: flex; gap: 10px; margin-top: 10px; }
+        .model-area { background: #eee; padding: 10px; border-radius: 4px; margin-bottom: 10px; }
+        input { flex-grow: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        select { padding: 8px; border-radius: 4px; width: 100%; }
+    </style>
+</head>
+<body>
+    <h2>マルコフ連鎖 AI対話</h2>
+    
+    <div class="model-area">
+        <label for="model-select">モデルを選択してください:</label>
+        <select id="model-select" py-change="change_model">
+            </select>
+    </div>
+
+    <div id="chat-log"></div>
+    
+    <div class="controls">
+        <input type="text" id="user-input" placeholder="メッセージを入力...">
+        <button id="send-btn" py-click="process_input">送信</button>
+    </div>
+
+    <py-config>
+        packages = ["janome"]
+        [[fetch]]
+        files = ["main.py", "corpus_data.json"]
+    </py-config>
+
+    <script type="py" src="main.py"></script>
+</body>
+</html>
