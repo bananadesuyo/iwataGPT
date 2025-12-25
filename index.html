@@ -2,25 +2,34 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>AIモデル切り替え対話</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iwataGPT</title>
     <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
     <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
     <style>
-        body { font-family: sans-serif; max-width: 600px; margin: 20px auto; padding: 20px; line-height: 1.6; }
-        #chat-log { border: 1px solid #ddd; height: 400px; overflow-y: auto; padding: 15px; margin: 10px 0; background: #fafafa; border-radius: 8px; }
-        .user { color: #2c3e50; font-weight: bold; margin-top: 5px; }
-        .ai { color: #27ae60; margin-bottom: 15px; padding-left: 10px; border-left: 3px solid #27ae60; }
+        body { font-family: sans-serif; max-width: 600px; margin: 20px auto; padding: 20px; line-height: 1.6; background-color: #f0f2f5; }
+        #loading-msg { background: #fff3cd; padding: 15px; text-align: center; border-radius: 8px; margin-bottom: 10px; border: 1px solid #ffeeba; color: #856404; }
+        #chat-log { border: 1px solid #ddd; height: 400px; overflow-y: auto; padding: 15px; margin: 10px 0; background: #ffffff; border-radius: 8px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
+        .user { color: #1a73e8; font-weight: bold; margin-top: 10px; }
+        .ai { color: #28a745; margin-bottom: 15px; padding-left: 10px; border-left: 3px solid #28a745; background: #f8fff9; padding: 8px; border-radius: 0 4px 4px 0; }
         .controls { display: flex; gap: 10px; margin-top: 10px; }
-        .model-area { background: #eee; padding: 10px; border-radius: 4px; margin-bottom: 10px; }
-        input { flex-grow: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
-        select { padding: 8px; border-radius: 4px; width: 100%; }
+        .model-area { background: #e9ecef; padding: 15px; border-radius: 8px; margin-bottom: 10px; }
+        input { flex-grow: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; }
+        select { padding: 10px; border-radius: 4px; width: 100%; border: 1px solid #ccc; background: white; }
+        button { padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #218838; }
     </style>
 </head>
 <body>
-    <h2>マルコフ連鎖 AI対話</h2>
+    <h2>iwataGPT 高精度チャット。</h2>
     
+    <div id="loading-msg">
+        🤖 AIが辞書を読み込んでいます...<br>
+        <small>（初回は30秒〜1分ほどかかる場合があります）</small>
+    </div>
+
     <div class="model-area">
-        <label for="model-select">モデルを選択してください:</label>
+        <label for="model-select">モデルを選択:</label>
         <select id="model-select" py-change="change_model">
             </select>
     </div>
@@ -32,9 +41,18 @@
         <button id="send-btn" py-click="process_input">送信</button>
     </div>
 
+    <script>
+        // Python側から呼び出す関数
+        function hideLoading() {
+            const loader = document.getElementById('loading-msg');
+            if(loader) loader.style.display = 'none';
+        }
+    </script>
+
     <py-config>
         packages = ["janome"]
         [[fetch]]
+        # 存在するJSONファイルをここにすべて列挙してください
         files = ["main.py", "corpus_data.json"]
     </py-config>
 
